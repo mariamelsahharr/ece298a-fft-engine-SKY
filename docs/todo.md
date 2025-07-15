@@ -1,0 +1,6 @@
+- info.yaml pinouts
+- read me's
+- update with how to make tests
+- update with new block diagram
+- update testplan.md with documentation for pre si tests
+- also update info.md
