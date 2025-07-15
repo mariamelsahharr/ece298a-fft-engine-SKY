@@ -4,3 +4,4 @@
 - update with new block diagram
 - update testplan.md with documentation for pre si tests
 - also update info.md
+- test docs
