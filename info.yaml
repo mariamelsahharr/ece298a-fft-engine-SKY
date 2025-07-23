@@ -48,7 +48,7 @@ pinout:
   uo[7]: "SEG_7"
 
   # Bidirectional pins
-  uio[0]: "DATA_0 (sample input / FFT output) (bits 7:4 = real, bits 3:0 = imag for output)""
+  uio[0]: "DATA_0 (sample input / FFT output) (bits 7:4 = real, bits 3:0 = imag for output)"
   uio[1]: "DATA_1"
   uio[2]: "DATA_2"
   uio[3]: "DATA_3"
