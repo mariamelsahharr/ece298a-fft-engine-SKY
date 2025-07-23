@@ -5,7 +5,7 @@ project:
   discord:      "marmareeta, vr._"      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
   description:  "4 bit FFT engine"      # One line description of what your project does
   language:     "SystemVerilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
-  clock_hz:     0       # Clock frequency in Hz (or 0 if not applicable)
+  clock_hz:     50,000,000      # Clock frequency in Hz (or 0 if not applicable)
 
   # How many tiles your design occupies? A single tile is about 167x108 uM.
   tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
@@ -28,8 +28,8 @@ project:
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
 pinout:
   # Inputs
-  ui[0]: "Unused"
-  ui[1]: "Unused"
+  ui[0]: "LOAD_BTN"
+  ui[1]: "OUTPUT_BTN"
   ui[2]: "Unused"
   ui[3]: "Unused"
   ui[4]: "Unused"
@@ -38,24 +38,24 @@ pinout:
   ui[7]: "Unused"
 
   # Outputs
-  uo[0]: "Unused"
-  uo[1]: "Unused"
-  uo[2]: "Unused"
-  uo[3]: "Unused"
-  uo[4]: "Unused"
-  uo[5]: "Unused"
-  uo[6]: "Unused"
-  uo[7]: "Unused"
+  uo[0]: "SEG_0"
+  uo[1]: "SEG_1"
+  uo[2]: "SEG_2"
+  uo[3]: "SEG_3"
+  uo[4]: "SEG_4"
+  uo[5]: "SEG_5"
+  uo[6]: "SEG_6"
+  uo[7]: "SEG_7"
 
   # Bidirectional pins
-  uio[0]: "Unused"
-  uio[1]: "Unused"
-  uio[2]: "Unused"
-  uio[3]: "Unused"
-  uio[4]: "Unused"
-  uio[5]: "Unused"
-  uio[6]: "Unused"
-  uio[7]: "Unused"
+  uio[0]: "DATA_0 (sample input / FFT output) (bits 7:4 = real, bits 3:0 = imag for output)""
+  uio[1]: "DATA_1"
+  uio[2]: "DATA_2"
+  uio[3]: "DATA_3"
+  uio[4]: "DATA_4"
+  uio[5]: "DATA_5"
+  uio[6]: "DATA_6"
+  uio[7]: "DATA_7"
 
 # Do not change!
 yaml_version: 6

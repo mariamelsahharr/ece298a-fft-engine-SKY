@@ -1,4 +1,3 @@
-- info.yaml pinouts
 - read me's
 - update with how to make tests
 - update with new block diagram
