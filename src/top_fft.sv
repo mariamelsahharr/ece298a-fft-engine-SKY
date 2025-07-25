@@ -84,7 +84,6 @@ module tt_um_FFT_engine (
             done <= '0;
             output_counter <= '0;
             processing_dly <= '0;
-            uio_out <= 8'h00;
         end else if (ena) begin
             processing_dly <= processing;
             if (load_pulse && addr == 2'd3) 
@@ -100,7 +99,11 @@ module tt_um_FFT_engine (
             if (output_pulse && done) begin
                 output_counter <= (output_counter == 2'd3) ? '0 : output_counter + 1;
             end
+        end
+    end
 
+    always_ff @(posedge clk) begin
+        if (ena) begin
             uio_out <= uio_out_next;
         end
     end
