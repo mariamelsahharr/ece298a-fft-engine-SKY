@@ -10,7 +10,7 @@ jobs:
           submodules: recursive
 
       - name: Install Sky130 PDK
-        uses: IIC-OSIC/actions/pdk-sky130@main
+        uses: IIC-OSIC/actions/pdk@main
 
       - name: Install iverilog
         shell: bash
