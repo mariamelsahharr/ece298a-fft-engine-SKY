@@ -17,7 +17,7 @@ endmodule
 
 module tt_um_FFT_engine (
     input  wire [7:0] ui_in,
-    output logic [7:0] uo_out,
+    output wire [7:0] uo_out,
     input  wire [7:0] uio_in,
     output wire [7:0] uio_out,
     output logic [7:0] uio_oe,
@@ -66,7 +66,8 @@ module tt_um_FFT_engine (
     logic [1:0] output_counter;
 
     // Pipeline output to avoid hold violations
-    (* keep *) logic [7:0] uio_out_next;
+    logic [7:0] uio_out_next;
+    wire [7:0] uo_out_from_display;
 
     io_ctrl io_inst (
         .clk(clk), .rst(rst_s), .ena(ena),
@@ -103,7 +104,7 @@ module tt_um_FFT_engine (
         .sample_counter(addr),
         .output_counter(output_counter),
         .processing(processing), .done(done),
-        .seg_out(uo_out)
+        .seg_out(uo_out_from_display)
     );
     
     assign uio_oe = (output_pulse && done) ? 8'hFF : 8'h00;
@@ -143,7 +144,7 @@ module tt_um_FFT_engine (
         end
     end
 
-    // register to be the input to our buffers
+    // Buffer FFT sample output
     logic [7:0] uio_out_reg;
 
     always_ff @(posedge clk) begin
@@ -158,6 +159,25 @@ module tt_um_FFT_engine (
             delay_cell out_delay_inst (
                 .A(uio_out_reg[i]),
                 .X(uio_out[i])
+            );
+        end
+    endgenerate
+
+    // Buffer 7-seg output
+    logic [7:0] uo_out_reg;
+
+    always_ff @(posedge clk) begin
+        if (ena) begin
+            uo_out_reg <= uo_out_from_display;
+        end
+    end
+
+    genvar j;
+    generate
+        for (j = 0; j < 8; j = j + 1) begin : uo_out_delay_gen
+            delay_cell uo_delay_inst (
+                .A(uo_out_reg[j]),
+                .X(uo_out[j])
             );
         end
     endgenerate
