@@ -20,7 +20,7 @@ module tt_um_FFT_engine (
     output wire [7:0] uo_out,
     input  wire [7:0] uio_in,
     output wire [7:0] uio_out,
-    output logic [7:0] uio_oe,
+    output wire [7:0] uio_oe,
     input  wire       ena,
     input  wire       clk,
     input  wire       rst_n
@@ -68,6 +68,7 @@ module tt_um_FFT_engine (
     // Pipeline output to avoid hold violations
     logic [7:0] uio_out_next;
     wire [7:0] uo_out_from_display;
+    wire [7:0] uio_oe_next;
 
     io_ctrl io_inst (
         .clk(clk), .rst(rst_s), .ena(ena),
@@ -107,7 +108,7 @@ module tt_um_FFT_engine (
         .seg_out(uo_out_from_display)
     );
     
-    assign uio_oe = (output_pulse && done) ? 8'hFF : 8'h00;
+    assign uio_oe_next = (output_pulse && done) ? 8'hFF : 8'h00;
     
     always_comb begin
         case(output_counter)
@@ -178,6 +179,25 @@ module tt_um_FFT_engine (
             delay_cell uo_delay_inst (
                 .A(uo_out_reg[j]),
                 .X(uo_out[j])
+            );
+        end
+    endgenerate
+
+    // Buffer output enable 
+    logic [7:0] uio_oe_reg;
+
+    always_ff @(posedge clk) begin
+        if (ena) begin
+            uio_oe_reg <= uio_oe_next;
+        end
+    end
+
+    genvar k;
+    generate
+        for (k = 0; k < 8; k = k + 1) begin : uio_oe_delay_gen
+            delay_cell uio_oe_delay_inst (
+                .A(uio_oe_reg[k]),
+                .X(uio_oe[k])
             );
         end
     endgenerate
