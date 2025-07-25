@@ -3,8 +3,9 @@ module delay_cell (
     input A,
     output X
 );
-    wire w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13, w14, w15;
-    wire w16, w17, w18, w19, w20, w21, w22, w23, w24, w25, w26, w27, w28, w29, w30, w31;
+    wire w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13, w14, w15, w16;
+    wire w17, w18, w19, w20, w21, w22, w23, w24, w25, w26, w27, w28, w29, w30, w31, w32;
+    wire w33, w34, w35, w36, w37, w38, w39;
 
     sky130_fd_sc_hd__buf_4 buf1 (.A(A),    .X(w1));
     sky130_fd_sc_hd__buf_4 buf2 (.A(w1),   .X(w2));
@@ -37,7 +38,15 @@ module delay_cell (
     sky130_fd_sc_hd__buf_4 buf29(.A(w28),  .X(w29));
     sky130_fd_sc_hd__buf_4 buf30(.A(w29),  .X(w30));
     sky130_fd_sc_hd__buf_4 buf31(.A(w30),  .X(w31));
-    sky130_fd_sc_hd__buf_4 buf32(.A(w31),  .X(X));
+    sky130_fd_sc_hd__buf_4 buf32(.A(w31),  .X(w32));
+    sky130_fd_sc_hd__buf_4 buf33(.A(w32),  .X(w33));
+    sky130_fd_sc_hd__buf_4 buf34(.A(w33),  .X(w34));
+    sky130_fd_sc_hd__buf_4 buf35(.A(w34),  .X(w35));
+    sky130_fd_sc_hd__buf_4 buf36(.A(w35),  .X(w36));
+    sky130_fd_sc_hd__buf_4 buf37(.A(w36),  .X(w37));
+    sky130_fd_sc_hd__buf_4 buf38(.A(w37),  .X(w38));
+    sky130_fd_sc_hd__buf_4 buf39(.A(w38),  .X(w39));
+    sky130_fd_sc_hd__buf_4 buf40(.A(w39),  .X(X));
 endmodule
 
 
