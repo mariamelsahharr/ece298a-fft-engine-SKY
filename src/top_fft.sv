@@ -81,6 +81,7 @@ module tt_um_FFT_engine (
             done <= '0;
             output_counter <= '0;
             processing_dly <= '0;
+            uio_out = 8'h00;
         end else if (ena) begin
             processing_dly <= processing;
             if (load_pulse && addr == 2'd3) 
@@ -96,11 +97,19 @@ module tt_um_FFT_engine (
             if (output_pulse && done) begin
                 output_counter <= (output_counter == 2'd3) ? '0 : output_counter + 1;
             end
+
+            case(output_counter)
+            2'd0: uio_out = {fft0_real[7:4], fft0_imag[7:4]};
+            2'd1: uio_out = {fft1_real[7:4], fft1_imag[7:4]};
+            2'd2: uio_out = {fft2_real[7:4], fft2_imag[7:4]};
+            2'd3: uio_out = {fft3_real[7:4], fft3_imag[7:4]};
+            default: uio_out = 8'h00;
+            endcase
         end
     end
     
     // Output selection using a case statement
-    always_comb begin
+    /*always_comb begin
         case(output_counter)
             2'd0: uio_out = {fft0_real[7:4], fft0_imag[7:4]};
             2'd1: uio_out = {fft1_real[7:4], fft1_imag[7:4]};
@@ -108,5 +117,5 @@ module tt_um_FFT_engine (
             2'd3: uio_out = {fft3_real[7:4], fft3_imag[7:4]};
             default: uio_out = 8'h00;
         endcase
-    end
+    end*/
 endmodule
