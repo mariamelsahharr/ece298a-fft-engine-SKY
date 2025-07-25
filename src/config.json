@@ -10,7 +10,7 @@
   "//": "If you get stuck with this config, please open an issue or get in touch via the discord.",
 
   "//": "Here are some of the variables you may want to change:",
-  "SYNTH_NO_FLAT": 1,
+  "SYNTH_HIERARCHY_MODE": "deferred_flatten",
 
   "//": "PL_TARGET_DENSITY_PCT - You can increase this if Global Placement fails with error GPL-0302.",
   "//": "Users have reported that values up to 80 worked well for them.",
@@ -18,7 +18,7 @@
 
   "//": "CLOCK_PERIOD - Increase this in case you are getting setup time violations.",
   "//": "The value is in nanoseconds, so 20ns == 50MHz.",
-  "CLOCK_PERIOD": 10,
+  "CLOCK_PERIOD": 20,
 
   "//": "Hold slack margin - Increase them in case you are getting hold violations.",
   "PL_RESIZER_HOLD_SLACK_MARGIN": 0.4,

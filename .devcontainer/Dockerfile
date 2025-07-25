@@ -24,4 +24,4 @@ RUN umask 022 && \
     chmod 755 /usr/local/bin
 
 # Install openlane
-RUN pip3 install openlane==2.2.9
+RUN pip3 install openlane==2.3.0
