@@ -84,7 +84,7 @@ module tt_um_FFT_engine (
             done <= '0;
             output_counter <= '0;
             processing_dly <= '0;
-            uio_out = 8'h00;
+            uio_out <= 8'h00;
         end else if (ena) begin
             processing_dly <= processing;
             if (load_pulse && addr == 2'd3) 
