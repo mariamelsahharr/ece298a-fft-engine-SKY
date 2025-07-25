@@ -31,6 +31,9 @@ module tt_um_FFT_engine (
     logic processing, done;
     logic processing_dly;
     logic [1:0] output_counter;
+
+    // Pipeline output to avoid hold violations
+    logic [7:0] uio_out_next;
     
     // Module instantiations
     io_ctrl io_inst (
@@ -98,24 +101,17 @@ module tt_um_FFT_engine (
                 output_counter <= (output_counter == 2'd3) ? '0 : output_counter + 1;
             end
 
-            case(output_counter)
-            2'd0: uio_out = {fft0_real[7:4], fft0_imag[7:4]};
-            2'd1: uio_out = {fft1_real[7:4], fft1_imag[7:4]};
-            2'd2: uio_out = {fft2_real[7:4], fft2_imag[7:4]};
-            2'd3: uio_out = {fft3_real[7:4], fft3_imag[7:4]};
-            default: uio_out = 8'h00;
-            endcase
+            uio_out <= uio_out_next;
         end
     end
-    
-    // Output selection using a case statement
-    /*always_comb begin
+
+    always_comb begin
         case(output_counter)
-            2'd0: uio_out = {fft0_real[7:4], fft0_imag[7:4]};
-            2'd1: uio_out = {fft1_real[7:4], fft1_imag[7:4]};
-            2'd2: uio_out = {fft2_real[7:4], fft2_imag[7:4]};
-            2'd3: uio_out = {fft3_real[7:4], fft3_imag[7:4]};
-            default: uio_out = 8'h00;
+            2'd0:    uio_out_next = {fft0_real[7:4], fft0_imag[7:4]};
+            2'd1:    uio_out_next = {fft1_real[7:4], fft1_imag[7:4]};
+            2'd2:    uio_out_next = {fft2_real[7:4], fft2_imag[7:4]};
+            2'd3:    uio_out_next = {fft3_real[7:4], fft3_imag[7:4]};
+            default: uio_out_next = 8'h00;
         endcase
-    end*/
+    end
 endmodule
