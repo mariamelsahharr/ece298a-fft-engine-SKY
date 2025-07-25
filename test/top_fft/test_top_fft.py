@@ -66,9 +66,9 @@ async def reset_dut(dut):
     dut.ena.value = 0
     dut.ui_in.value = 0
     dut.uio_in.value = 0
-    await ClockCycles(dut.clk, 2)
+    await ClockCycles(dut.clk, 5) 
     dut.rst_n.value = 1
-    await RisingEdge(dut.clk)
+    await ClockCycles(dut.clk, 5)
     dut._log.info("DUT reset")
 
 async def load_sample(dut, data_in):
@@ -92,7 +92,8 @@ async def run_full_fft_test(dut, inputs):
     
     # --- Wait for processing to finish ---
     dut._log.info("Waiting for DUT to assert internal 'done' signal...")
-    timeout_cycles = 20
+    
+    timeout_cycles = 100
     for i in range(timeout_cycles):
         if dut.dut.done.value == 1:
             dut._log.info(f"DUT asserted 'done' after {i+1} cycles.")
@@ -105,24 +106,23 @@ async def run_full_fft_test(dut, inputs):
     # --- Read and Verify Phase ---
     actual_outputs = []
     for i in range(4):
-        # 1. Assert the read trigger
         dut.ui_in.value = 2
         await RisingEdge(dut.clk)
         
-        # 2. Check the output enable
+        # Add a wait cycle for the output pipeline stage.
+        await RisingEdge(dut.clk)
+
         assert dut.uio_oe.value.integer == 0xFF, f"uio_oe was not asserted for output {i}."
         
-        # 3. Sample the output data and check it
         dut_out = dut.uio_out.value.integer
         actual_outputs.append(dut_out)
         
         assert dut_out == expected_outputs[i], \
             f"Output {i} mismatch: DUT={hex(dut_out)}, Expected={hex(expected_outputs[i])}"
 
-        # 4. De-assert the read trigger.
         dut.ui_in.value = 0
 
-        # 5. Wait one more clock cycle.
+        # Wait one more clock cycle to see the OE de-assert
         await RisingEdge(dut.clk)
         assert dut.uio_oe.value == 0, f"uio_oe did not de-assert after reading output {i}"
 

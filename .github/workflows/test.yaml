@@ -8,10 +8,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-
-      - name: Install Sky130 PDK
-        uses: IIC-OSIC/actions/pdk@main
-
+      
       - name: Install iverilog
         shell: bash
         run: sudo apt-get update && sudo apt-get install -y iverilog

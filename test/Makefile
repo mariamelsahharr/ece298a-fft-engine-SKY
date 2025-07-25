@@ -15,6 +15,7 @@ PROJECT_SOURCES = top_fft.sv \
                   butterfly.sv \
 				  io_ctrl.sv \
 				  memory_ctrl.sv \
+				  delay_cell.sv \
 
 ifneq ($(GATES),yes)
 
@@ -89,7 +90,7 @@ test-top:
 	$(MAKE) sim \
 		MODULE=test_top_fft \
 		TOPLEVEL=tt_um_FFT_engine_tb \
-		VERILOG_SOURCES="$(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd.v ./top_fft/top_fft_tb.sv ../src/io_ctrl.sv ../src/butterfly.sv ../src/display_ctrl.sv ../src/fft_engine.sv ../src/memory_ctrl.sv ../src/top_fft.sv"\
+		VERILOG_SOURCES="../pdk_files/sky130_fd_sc_hd_fast.v ./top_fft/top_fft_tb.sv ../src/io_ctrl.sv ../src/butterfly.sv ../src/display_ctrl.sv ../src/fft_engine.sv ../src/memory_ctrl.sv ../src/delay_cell.sv ../src/top_fft.sv"\
 		VERILATOR_FLAGS="--trace --public-flat-rw" \
 		PYTHONPATH=$(PWD)/top_fft \
 		WAVES_DIR=$(PWD)/top_fft/wave \
