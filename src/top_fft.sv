@@ -33,7 +33,7 @@ module tt_um_FFT_engine (
     logic [1:0] output_counter;
 
     // Pipeline output to avoid hold violations
-    logic [7:0] uio_out_next;
+    (* keep *) logic [7:0] uio_out_next;
     
     // Module instantiations
     io_ctrl io_inst (
