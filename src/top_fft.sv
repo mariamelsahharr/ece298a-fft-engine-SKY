@@ -1,4 +1,21 @@
-// `include "sky130_fd_sc_hd.v" 
+`include "sky130_fd_sc_hd.v"
+
+// A reusable module to create a non-optimizable delay chain
+module delay_cell (
+    input A,
+    output X
+);
+    wire w1, w2, w3, w4, w5, w6, w7;
+    sky130_fd_sc_hd__buf_4 buf1 (.A(A),   .X(w1));
+    sky130_fd_sc_hd__buf_4 buf2 (.A(w1),  .X(w2));
+    sky130_fd_sc_hd__buf_4 buf3 (.A(w2),  .X(w3));
+    sky130_fd_sc_hd__buf_4 buf4 (.A(w3),  .X(w4));
+    sky130_fd_sc_hd__buf_4 buf5 (.A(w4),  .X(w5));
+    sky130_fd_sc_hd__buf_4 buf6 (.A(w5),  .X(w6));
+    sky130_fd_sc_hd__buf_4 buf7 (.A(w6),  .X(w7));
+    sky130_fd_sc_hd__buf_4 buf8 (.A(w7),  .X(X));
+endmodule
+
 
 module tt_um_FFT_engine (
     input  wire [7:0] ui_in,
@@ -11,8 +28,11 @@ module tt_um_FFT_engine (
     input  wire       rst_n
 );
     // Synchronize the external, asynchronous reset to the internal clock domain.
+    wire rst_n_buffered;
+    delay_cell rst_delay (.A(rst_n), .X(rst_n_buffered));
+
     logic rst_sync1, rst_sync2;
-    wire rst_async = ~rst_n;
+    wire rst_async = ~rst_n_buffered;
     
     always_ff @(posedge clk or posedge rst_async) begin
         if (rst_async) begin
@@ -136,8 +156,8 @@ module tt_um_FFT_engine (
 
     genvar i;
     generate
-        for (i = 0; i < 8; i = i + 1) begin : out_buf_gen
-            sky130_fd_sc_hd__buf_2 buf_inst (
+        for (i = 0; i < 8; i = i + 1) begin : out_delay_gen
+            delay_cell out_delay_inst (
                 .A(uio_out_reg[i]),
                 .X(uio_out[i])
             );
