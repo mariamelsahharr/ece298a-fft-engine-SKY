@@ -1,5 +1,3 @@
-`include "sky130_fd_sc_hd.v"
-
 // A reusable module to create a non-optimizable delay chain
 module delay_cell (
     input A,
