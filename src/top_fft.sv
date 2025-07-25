@@ -1,16 +1,31 @@
+// `include "sky130_fd_sc_hd.v" 
+
 module tt_um_FFT_engine (
     input  wire [7:0] ui_in,
     output logic [7:0] uo_out,
     input  wire [7:0] uio_in,
-    output logic [7:0] uio_out,
+    output wire [7:0] uio_out,
     output logic [7:0] uio_oe,
     input  wire       ena,
     input  wire       clk,
     input  wire       rst_n
 );
-    // System signals
-    wire rst = ~rst_n;
+    // Synchronize the external, asynchronous reset to the internal clock domain.
+    logic rst_sync1, rst_sync2;
+    wire rst_async = ~rst_n;
     
+    always_ff @(posedge clk or posedge rst_async) begin
+        if (rst_async) begin
+            rst_sync1 <= 1'b1;
+            rst_sync2 <= 1'b1;
+        end else begin
+            rst_sync1 <= 1'b0;
+            rst_sync2 <= rst_sync1;
+        end
+    end
+    
+    wire rst_s = rst_sync2;
+
     // Control signals
     wire load_pulse, output_pulse;
     wire [1:0] addr;
@@ -34,10 +49,9 @@ module tt_um_FFT_engine (
 
     // Pipeline output to avoid hold violations
     (* keep *) logic [7:0] uio_out_next;
-    
-    // Module instantiations
+
     io_ctrl io_inst (
-        .clk(clk), .rst(rst), .ena(ena),
+        .clk(clk), .rst(rst_s), .ena(ena),
         .ui_in0(ui_in[0]), .ui_in1(ui_in[1]),
         .load_pulse(load_pulse),
         .output_pulse(output_pulse),
@@ -45,7 +59,7 @@ module tt_um_FFT_engine (
     );
     
     memory_ctrl mem_inst (
-        .clk(clk), .rst(rst), .ena(ena),
+        .clk(clk), .rst(rst_s), .ena(ena),
         .load_pulse(load_pulse),
         .addr(addr),
         .data_in(uio_in),
@@ -55,9 +69,8 @@ module tt_um_FFT_engine (
         .real3_out(sample3_real), .imag3_out(sample3_imag)
     );
     
-    // Connect FFT engine using individual signals
     fft_engine fft_inst (
-        .clk(clk), .rst(rst),
+        .clk(clk), .rst(rst_s),
         .in0_real(sample0_real), .in0_imag(sample0_imag),
         .in1_real(sample1_real), .in1_imag(sample1_imag),
         .in2_real(sample2_real), .in2_imag(sample2_imag),
@@ -74,16 +87,26 @@ module tt_um_FFT_engine (
         .processing(processing), .done(done),
         .seg_out(uo_out)
     );
-
+    
     assign uio_oe = (output_pulse && done) ? 8'hFF : 8'h00;
     
-    // Output control
-    always_ff @(posedge clk or posedge rst) begin
-        if (rst) begin
-            processing <= '0;
-            done <= '0;
-            output_counter <= '0;
-            processing_dly <= '0;
+    always_comb begin
+        case(output_counter)
+            2'd0: uio_out_next = {fft0_real[7:4], fft0_imag[7:4]};
+            2'd1: uio_out_next = {fft1_real[7:4], fft1_imag[7:4]};
+            2'd2: uio_out_next = {fft2_real[7:4], fft2_imag[7:4]};
+            2'd3: uio_out_next = {fft3_real[7:4], fft3_imag[7:4]};
+            default: uio_out_next = 8'h00;
+        endcase
+    end
+    
+    // State machine logic
+    always_ff @(posedge clk or posedge rst_s) begin
+        if (rst_s) begin
+            processing <= 1'b0;
+            done <= 1'b0;
+            output_counter <= 2'b00;
+            processing_dly <= 1'b0;
         end else if (ena) begin
             processing_dly <= processing;
             if (load_pulse && addr == 2'd3) 
@@ -102,19 +125,23 @@ module tt_um_FFT_engine (
         end
     end
 
+    // register to be the input to our buffers
+    logic [7:0] uio_out_reg;
+
     always_ff @(posedge clk) begin
         if (ena) begin
-            uio_out <= uio_out_next;
+            uio_out_reg <= uio_out_next;
         end
     end
 
-    always_comb begin
-        case(output_counter)
-            2'd0:    uio_out_next = {fft0_real[7:4], fft0_imag[7:4]};
-            2'd1:    uio_out_next = {fft1_real[7:4], fft1_imag[7:4]};
-            2'd2:    uio_out_next = {fft2_real[7:4], fft2_imag[7:4]};
-            2'd3:    uio_out_next = {fft3_real[7:4], fft3_imag[7:4]};
-            default: uio_out_next = 8'h00;
-        endcase
-    end
+    genvar i;
+    generate
+        for (i = 0; i < 8; i = i + 1) begin : out_buf_gen
+            sky130_fd_sc_hd__buf_2 buf_inst (
+                .A(uio_out_reg[i]),
+                .X(uio_out[i])
+            );
+        end
+    endgenerate
+
 endmodule
