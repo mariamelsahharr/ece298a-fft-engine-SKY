@@ -10,16 +10,16 @@ jobs:
           submodules: recursive
 
       - name: Run All Tests in PDK Environment
-        uses: TinyTapeout/tt-gds-action/test@ttsky25a
+        uses: TinyTapeout/tt-gds-action@ttsky25a
         with:
-          command: |
+          mode: test
+          test_command: |
             cd test
             make test-butterfly
             make test-fft-engine
             make test-memory
             make test-io
             make test-top
-            # make will return success even if the test fails, so check for failure in the results.xml
             ! grep failure results.xml
 
       - name: Test Summary
@@ -29,10 +29,10 @@ jobs:
         if: always()
 
       - name: upload vcd
-        if: success() || failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-vcd
           path: |
-            test/tb.vcd
             test/results.xml
+            test/top_fft/wave/
