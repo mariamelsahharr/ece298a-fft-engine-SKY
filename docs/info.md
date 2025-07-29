@@ -59,7 +59,7 @@ The system uses a simple 2-button interface:
 
 The display provides real-time operation feedback:
 - **1-4**: Currently inputting sample n
-- **C**: Computing FFT (20-cycle processing phase)
+- **C**: Computing FFT (processing phase)
 - **5-8**: Currently outputting frequency bin n-4
 
 **[FFT Engine INITIAL Design Document, NOT UP TO DATE USE DOCS IN REPO INSTEAD](https://docs.google.com/document/d/13jseVi1bMsw91EZKD1t0jHazFGBT2K84RPKfIGI_DeA/edit?tab=t.0#heading=h.6vw8kxunlpo9)**

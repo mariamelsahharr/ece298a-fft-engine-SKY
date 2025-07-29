@@ -1,0 +1,14 @@
+{
+  "DESIGN_NAME": "tt_um_FFT_engine",
+  "VERILOG_FILES": [
+    "dir::top_fft.sv",
+    "dir::butterfly.sv",
+    "dir::display_ctrl.sv",
+    "dir::fft_engine.sv",
+    "dir::io_ctrl.sv",
+    "dir::memory_ctrl.sv",
+    "dir::delay_cell.sv"
+  ],
+  "DIE_AREA": "0 0 161.00 111.52",
+  "FP_DEF_TEMPLATE": "dir::../tt/def/tt_block_1x1_pg.def"
+}
