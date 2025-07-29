@@ -102,7 +102,7 @@ test/
    - Statistical validation against reference
    - Stress testing edge cases
 
-## Static Timing Analysis & Power Validation
+## Static Timing Analysis
 
 ### Synthesis and Timing Signoff
 
