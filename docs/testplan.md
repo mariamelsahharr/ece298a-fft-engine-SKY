@@ -103,41 +103,7 @@ test/
    - Stress testing edge cases
 
 ## Static Timing Analysis
-
-### Synthesis and Timing Signoff
-
-To ensure the design meets timing requirements across all process corners and voltage variations, we performed full **static timing analysis (STA)** using OpenLane's `opensta` toolchain. The setup is provided [here](../verilog_sta/).
-
-#### Key Metrics Checked:
-
-- **Setup/Hold Timing**  
-  All flip-flop paths were verified to meet setup and hold constraints at the target frequency (50 MHz).
-- **Min/Max Path Analysis**  
-  - **Min path violations** were identified on asynchronous reset and combinational outputs.
-  - These were resolved by synchronizing resets and registering all outputs.
-- **Clock Tree Propagation**  
-  Clock buffers and insertion delay were accounted for in the propagated timing analysis.
-
-### Final Timing Signoff
-
-All checks passed across the following PVT corners:
-
-- **SS** (Slow-Slow @ 0.55 V, 125 °C) — Ensures **hold** and min delay safety
-- **TT** (Typical-Typical @ 1.8 V, 25 °C) — Nominal case for performance/power
-- **FF** (Fast-Fast @ 1.95
-
-#### Timing Highlights
-
-- **Hold Checks**: All paths met hold constraints  
-  - *Worst slack*: **+0.32 ns**
-- **Setup Checks**: All paths met setup constraints  
-  - *Worst slack*: **+5.53 ns**
-- **Recovery/Removal**: Reset paths validated; no violations  
-  - *Worst slack*: **+3.96 ns**
-- **Clock Skew and Uncertainty**: Within acceptable bounds 
-  - **-0.10ns**
-
-See the full results [here](../verilog_sta/results.md).
+See the dedicated doc [here](./sta.md)
 
 ## Timing Requirements
 
