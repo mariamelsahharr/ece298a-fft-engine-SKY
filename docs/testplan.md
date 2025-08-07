@@ -126,6 +126,19 @@ All checks passed across the following PVT corners:
 - **TT** (Typical-Typical @ 1.8 V, 25 °C) — Nominal case for performance/power
 - **FF** (Fast-Fast @ 1.95
 
+#### Timing Highlights
+
+- **Hold Checks**: All paths met hold constraints  
+  - *Worst slack*: **+0.32 ns**
+- **Setup Checks**: All paths met setup constraints  
+  - *Worst slack*: **+5.53 ns**
+- **Recovery/Removal**: Reset paths validated; no violations  
+  - *Worst slack*: **+3.96 ns**
+- **Clock Skew and Uncertainty**: Within acceptable bounds 
+  - **-0.10ns**
+
+See the full results [here](../verilog_sta/results.md).
+
 ## Timing Requirements
 
 ### Critical Timing Constraints
