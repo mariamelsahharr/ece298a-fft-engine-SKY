@@ -118,3 +118,12 @@ The display provides real-time operation feedback:
 - `uio[7:0]`: Bidirectional data bus (input samples / output results)
 - `rst_n`: Active-low reset
 - `clk`: 50 MHz system clock
+
+## Acknowledgements
+This project was completed collaboratively, with both team members contributing to various components at different stages. A project proposal was designed jointly, and the initial division of responsibilities was as follows:
+
+Hadi Zaidi: I/O Control, FFT Engine, Top Level design, Static Timing Analysis
+
+Mariam El Sahhar: Memory, Butterfly Unit, Design Verification, Testbenches, Waveform Analysis
+
+Throughout the project, both members provided support and input across all areas as needed. An earlier iteration can be found [here](https://github.com/mariamelsahharr/FFT-engine-ece298a).
