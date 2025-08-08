@@ -33,7 +33,7 @@ All checks passed across the following PVT corners:
 - **Clock Skew and Uncertainty**: Within acceptable bounds 
   - **-0.10ns**
 
-See the full results [here](../verilog_sta/results.md).
+See the full results [here](../verilog_sta/results.txt).
 
 ## Pre-PNR vs. Post-PNR Static Timing Analysis Comparison
 
