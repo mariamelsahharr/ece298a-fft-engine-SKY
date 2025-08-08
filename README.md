@@ -38,7 +38,7 @@ Used to interface with 7-segment display
 ## Operation
 
 1. **Load Phase**: Input 4 complex samples sequentially via data bus
-2. **Processing**: FFT computation (21 cycles)
+2. **Processing**: FFT computation (20 cycles)
 3. **Output Phase**: Read 4 complex FFT results sequentially
 
 The 7-segment display shows the current operation mode throughout the process.
